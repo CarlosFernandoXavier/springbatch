@@ -48,7 +48,6 @@ Thumbs.db
 Thumbs.db:encryptable
 ehthumbs.db
 ehthumbs_vista.db
-
 # Dump file
 *.stackdump
 
@@ -68,4 +67,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/java,intellij,linux,windows,maven
+# Não subir arquivos .txt
+/src/main/resources/*.txt

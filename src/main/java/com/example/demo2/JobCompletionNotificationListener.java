@@ -10,6 +10,9 @@ import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 @Component
 public class JobCompletionNotificationListener implements JobExecutionListener {
@@ -17,20 +20,28 @@ public class JobCompletionNotificationListener implements JobExecutionListener {
     private static final Logger log = LoggerFactory.getLogger(JobCompletionNotificationListener.class);
 
     private final JdbcTemplate jdbcTemplate;
+    private FileWriter fileWriter;
 
-    public JobCompletionNotificationListener(JdbcTemplate jdbcTemplate) {
+    public JobCompletionNotificationListener(JdbcTemplate jdbcTemplate, FileWriter fileWriter) {
         this.jdbcTemplate = jdbcTemplate;
+        this.fileWriter = fileWriter;
     }
 
     @Override
     public void afterJob(JobExecution jobExecution) {
         Integer a = 90;
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-            log.info("!!! JOB FINISHED! Time to verify the results");
+            try {
+                fileWriter.close();
 
-            jdbcTemplate
-                    .query("SELECT first_name, last_name FROM people", new DataClassRowMapper<>(Person.class))
-                    .forEach(person -> log.info("Found <{{}}> in the database.", person));
+                log.info("!!! JOB FINISHED! Time to verify the results");
+
+                jdbcTemplate
+                        .query("SELECT first_name, last_name FROM people", new DataClassRowMapper<>(Person.class))
+                        .forEach(person -> log.info("Found <{{}}> in the database.", person));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
