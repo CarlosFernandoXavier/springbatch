@@ -43,14 +43,6 @@ public class BatchConfiguration {
         return new PersonItemProcessor();
     }
 
-    @Bean
-    public JdbcBatchItemWriter<Person> writer(DataSource dataSource) {
-        return new JdbcBatchItemWriterBuilder<Person>()
-                .sql("INSERT INTO people (first_name, last_name) VALUES (:firstName, :lastName)")
-                .dataSource(dataSource)
-                .beanMapped()
-                .build();
-    }
 
     @Bean
     public Job importUserJob(JobRepository jobRepository, Step step1, JobCompletionNotificationListener listener) {
