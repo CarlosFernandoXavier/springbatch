@@ -13,8 +13,6 @@ public class PersonItemProcessor implements ItemProcessor<Person, Person> {
 
     @Override
     public Person process(final Person person) {
-
-      //  Person person = people.get(0);
         final String firstName = person.firstName().toUpperCase();
         final String lastName = person.lastName().toUpperCase();
 
